@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 import plus from "../../assets/plus.svg";
 import profile from "../../assets/profile.png";
 import search from "../../assets/search.svg";
@@ -71,14 +72,14 @@ const Home = () => {
                 </div>
                 <div className="block lg:flex mt-5 lg:mg-0">
                   <div className="">
-                    <a href="#">
+                    <Link to="/topup">
                       <img src={plus} className="w-16 md:w-20" alt="plus" />
-                    </a>
+                    </Link>
                   </div>
                   <div className="">
-                    <a href="transfer.html">
+                    <Link to="/transfer">
                       <img src={send} className="w-16 md:w-20" alt="send" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
