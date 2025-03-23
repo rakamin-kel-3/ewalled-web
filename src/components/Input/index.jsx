@@ -6,7 +6,7 @@ const Input = ({ type, name, value, onChange, placeholder, classname }) => {
     <input
       className={classNames(
         classname,
-        "rounded-md px-5 py-3 bg-[#FAFBFD] text-black w-full text-md"
+        "rounded-md px-5 py-4 bg-[#FAFBFD] text-black w-full text-md placeholder:font-semibold placeholder:text-black"
       )}
       type={type}
       name={name}
