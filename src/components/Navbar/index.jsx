@@ -6,14 +6,14 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import React from "react";
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import logo from "../../assets/logo.svg";
 import sunLight from "../../assets/sun-light.svg";
 
 const navigation = [
-  { name: "Dashboard", href: "/", current: true },
-  { name: "Transfer", href: "/trasnfer", current: false },
-  { name: "Topup", href: "/topup", current: false },
+  { name: "Dashboard", href: "/" },
+  { name: "Transfer", href: "/transfer" },
+  { name: "Topup", href: "/topup" },
 ];
 
 export const Navbar = () => {
@@ -45,19 +45,21 @@ export const Navbar = () => {
             {/* Profile dropdown */}
             <div className="flex lg:space-x-7 md:space-x-4 space-x-1 items-center">
               {navigation.map((item) => (
-                <Link
+                <NavLink
                   key={item.name}
                   to={item.href}
                   aria-current={item.current ? "page" : undefined}
-                  className={classNames(
-                    item.current
-                      ? "text-[#0061FF]"
-                      : "text-black hover:text-[#0061FF",
-                    "rounded-md px-3 py-2 text-sm font-medium"
-                  )}
+                  className={({ isActive }) => {
+                    return classNames(
+                      isActive
+                        ? "text-[#0061FF]"
+                        : "text-black hover:text-[#0061FF",
+                      "rounded-md px-3 py-2 text-sm font-medium"
+                    );
+                  }}
                 >
                   {item.name}
-                </Link>
+                </NavLink>
               ))}
               <button className="text-black hover:text-[#0061FF] rounded-md px-3 py-2 text-sm font-medium">
                 Sign Out
