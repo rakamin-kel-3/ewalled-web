@@ -48,7 +48,9 @@ const Login = () => {
           <div className="mt-6">
             <p>
               Belum Punya Akun?{" "}
-              <Link className="text-[#0061FF]">Daftar di sini</Link>
+              <Link to={"/register"} className="text-[#0061FF]">
+                Daftar di sini
+              </Link>
             </p>
           </div>
         </div>
