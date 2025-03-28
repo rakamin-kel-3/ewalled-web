@@ -6,7 +6,7 @@ import {
 } from "@headlessui/react";
 import success from "../../assets/success.svg";
 
-export default function TransactionModal({ open, setOpen }) {
+export default function TransactionModal({ open, setOpen, data }) {
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
       <DialogBackdrop
@@ -40,25 +40,27 @@ export default function TransactionModal({ open, setOpen }) {
                   <div className="mt-10">
                     <div className="flex justify-between items-center mb-3">
                       <p className="text-md font-light">Amount</p>
-                      <p className="font-bold text-2xl">1.000.000</p>
+                      <p className="font-bold text-2xl">{data?.amount}</p>
                     </div>
                     <div className="flex justify-between items-center mb-3">
-                      <p className="text-md font-light">Transaction ID</p>
-                      <p className="text-md font-light">3217837473824</p>
+                      <p className="text-md font-light text-start">
+                        Transaction ID
+                      </p>
+                      <p className="text-md font-light text-end">
+                        {data?.transactionId}
+                      </p>
                     </div>
                     <div className="flex justify-between items-center mb-3">
                       <p className="text-md font-light">From</p>
-                      <p className="text-md font-light">01010101010</p>
+                      <p className="text-md font-light">{data?.accountFrom}</p>
                     </div>
                     <div className="flex justify-between items-center mb-3">
                       <p className="text-md font-light">To</p>
-                      <p className="text-md font-light">10110101010</p>
+                      <p className="text-md font-light">{data?.accountTo}</p>
                     </div>
                     <div className="flex justify-between items-center mb-3">
                       <p className="text-md font-light">Description</p>
-                      <p className="text-md font-light">
-                        Bayar Iphone 100 Pro Max
-                      </p>
+                      <p className="text-md font-light">{data?.description}</p>
                     </div>
                   </div>
                 </div>
