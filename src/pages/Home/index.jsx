@@ -14,7 +14,7 @@ import Table from "../../components/Table";
 import { useUserContext } from "../../context/userContext";
 
 const Home = () => {
-  const { userInfo, fetchUser } = useUserContext();
+  const { userInfo } = useUserContext();
   const [account, setAccount] = useState({});
   const [transactions, setTransactions] = useState([]);
 
@@ -86,7 +86,7 @@ const Home = () => {
             <div className="lg:col-span-3 px-6 py-2 lg:px-9 lg:pt-10 lg:pb-14 bg-[#0061FF] text-white rounded-xl items-center">
               <div className="flex lg:block justify-between items-center">
                 <p className="font-light text-xl lg:mb-3">Account No.</p>
-                <p className="text-2xl lg:text-3xl">{account?.account_no}</p>
+                <p className="text-2xl lg:text-3xl">{account?.accountNo}</p>
               </div>
             </div>
             <div className="lg:col-span-9 bg-white rounded-xl px-3 lg:px-9 lg:pt-10 lg:pb-14">

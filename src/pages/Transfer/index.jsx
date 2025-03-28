@@ -81,8 +81,8 @@ const Transfer = () => {
                         Select receipent account
                       </option>
                       {accounts?.map((item, key) => (
-                        <option key={key} value={item.account_no}>
-                          {item.account_no} ({item.name})
+                        <option key={key} value={item.accountNo}>
+                          {item.accountNo} ({item.name})
                         </option>
                       ))}
                     </select>
