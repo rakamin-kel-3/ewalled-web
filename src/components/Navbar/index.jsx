@@ -9,6 +9,7 @@ import React from "react";
 import { NavLink } from "react-router";
 import logo from "../../assets/logo.svg";
 import sunLight from "../../assets/sun-light.svg";
+import { useUserContext } from "../../context/userContext";
 
 const navigation = [
   { name: "Dashboard", href: "/" },
@@ -17,6 +18,7 @@ const navigation = [
 ];
 
 export const Navbar = () => {
+  const { logout } = useUserContext();
   return (
     <Disclosure as="nav" className="bg-white">
       <div className="mx-auto max-w-5xl px-2 sm:px-6 lg:px-8">
@@ -61,7 +63,10 @@ export const Navbar = () => {
                   {item.name}
                 </NavLink>
               ))}
-              <button className="text-black hover:text-[#0061FF] rounded-md px-3 py-2 text-sm font-medium">
+              <button
+                className="text-black hover:text-[#0061FF] rounded-md px-3 py-2 text-sm font-medium"
+                onClick={logout}
+              >
                 Sign Out
               </button>
               <div className="border-1 h-7 border-[#B3B3B3] my-auto"></div>

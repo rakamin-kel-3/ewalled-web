@@ -1,10 +1,10 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router";
+import { useUserContext } from "../context/userContext";
 import useSnackbar from "../hooks/useSnackbar";
-import useUserStore from "../store/userStore";
 
 const ProtectedRoute = () => {
-  const { isAuthenticated } = useUserStore();
+  const { isAuthenticated } = useUserContext();
   const snackbar = useSnackbar();
 
   if (isAuthenticated) {
