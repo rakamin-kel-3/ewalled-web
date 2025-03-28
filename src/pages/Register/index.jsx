@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { registerUser } from "../../api/model/user";
@@ -15,16 +15,21 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const snackbar = useSnackbar();
   const navigate = useNavigate();
 
   const onSubmit = async (d) => {
     try {
+      setIsLoading(true);
       await registerUser(d.name, d.email, d.password, d.phoneNumber);
       snackbar.success("Berhasil daftar, silahkan login!");
       navigate("/login");
     } catch (error) {
       snackbar.error(error.response?.data.metadata.message);
+    } finally {
+      setIsLoading(true);
     }
   };
 
@@ -81,7 +86,11 @@ const Register = () => {
               )}
             </div>
             <div className="mx-auto mt-12">
-              <Button label={"Register"} classname="w-full text-xl py-4" />
+              <Button
+                label={"Register"}
+                classname="w-full text-xl py-4"
+                isLoading={isLoading}
+              />
             </div>
           </form>
           <div className="mt-6">

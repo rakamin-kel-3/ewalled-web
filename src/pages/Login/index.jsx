@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { loginUser } from "../../api/model/user";
@@ -18,14 +18,18 @@ const Login = () => {
 
   const { login } = useUserContext();
   const snackbar = useSnackbar();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (d) => {
     try {
+      setIsLoading(true);
       const res = await loginUser(d.email, d.password);
       login(res.data.data);
       snackbar.success("Selamat Datang!");
     } catch (error) {
       snackbar.error(error.response?.data.metadata.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,7 +64,11 @@ const Login = () => {
               )}
             </div>
             <div className="mx-auto mt-12">
-              <Button label={"Login"} classname="w-full text-xl py-4" />
+              <Button
+                label={"Login"}
+                classname="w-full text-xl py-4"
+                isLoading={isLoading}
+              />
             </div>
             <div className="mt-6">
               <p>
