@@ -1,18 +1,31 @@
-import React, { useState } from "react";
-import { Link } from "react-router";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { registerUser } from "../../api/model/user";
 import loginImg from "../../assets/login.png";
 import logo from "../../assets/logo.svg";
 import Button from "../../components/Button/button";
 import Input from "../../components/Input";
+import useSnackbar from "../../hooks/useSnackbar";
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleRegister = () => {
-    console.log("register");
+  const snackbar = useSnackbar();
+  const navigate = useNavigate();
+
+  const onSubmit = async (d) => {
+    try {
+      await registerUser(d.name, d.email, d.password, d.phoneNumber);
+      snackbar.success("Berhasil daftar, silahkan login!");
+      navigate("/login");
+    } catch (error) {
+      snackbar.error(error.response?.data.metadata.message);
+    }
   };
 
   return (
@@ -20,49 +33,57 @@ const Register = () => {
       <div className="max-w-md m-auto w-full px-5 lg:px-0">
         <div className="mx-auto">
           <img src={logo} className="mx-auto" alt="" />
-          <div className="mt-20 mx-auto">
-            <Input
-              type={"text"}
-              name={"name"}
-              value={name}
-              placeholder={"Nama Lengkap"}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="mt-6 mx-auto">
-            <Input
-              type={"email"}
-              name={"email"}
-              value={email}
-              placeholder={"Email"}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="mt-6 mx-auto">
-            <Input
-              type={"password"}
-              name={"password"}
-              value={password}
-              placeholder={"Password"}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="mt-6 mx-auto">
-            <Input
-              type={"number"}
-              name={"phoneNumber"}
-              value={phoneNumber}
-              placeholder={"No Hp"}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-          </div>
-          <div className="mx-auto mt-12">
-            <Button
-              label={"Register"}
-              onClick={() => handleRegister()}
-              classname="w-full text-xl py-4"
-            />
-          </div>
+          <form action="" onSubmit={handleSubmit(onSubmit)}>
+            <div className="mt-20 mx-auto">
+              <Input
+                type={"text"}
+                name={"name"}
+                placeholder={"Nama Lengkap"}
+                {...register("name", { required: true })}
+              />
+              {errors.name && (
+                <span className="text-sm text-red-600">Nama wajib diisi</span>
+              )}
+            </div>
+            <div className="mt-6 mx-auto">
+              <Input
+                type={"email"}
+                name={"email"}
+                placeholder={"Email"}
+                {...register("email", { required: true })}
+              />
+              {errors.email && (
+                <span className="text-sm text-red-600">Email wajib diisi</span>
+              )}
+            </div>
+            <div className="mt-6 mx-auto">
+              <Input
+                type={"password"}
+                name={"password"}
+                placeholder={"Password"}
+                {...register("password", { required: true })}
+              />
+              {errors.password && (
+                <span className="text-sm text-red-600">
+                  Password wajib diisi
+                </span>
+              )}
+            </div>
+            <div className="mt-6 mx-auto">
+              <Input
+                type={"number"}
+                name={"phoneNumber"}
+                placeholder={"No Hp"}
+                {...register("phoneNumber", { required: true })}
+              />
+              {errors.phoneNumber && (
+                <span className="text-sm text-red-600">No HP wajib diisi</span>
+              )}
+            </div>
+            <div className="mx-auto mt-12">
+              <Button label={"Register"} classname="w-full text-xl py-4" />
+            </div>
+          </form>
           <div className="mt-6">
             <p>
               Sudah Punya Akun?{" "}
