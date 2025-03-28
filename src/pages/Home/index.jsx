@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { getAccount } from "../../api/model/account";
+import { getTransaction } from "../../api/model/transaction";
 import plus from "../../assets/plus.svg";
 import profile from "../../assets/profile.png";
 import search from "../../assets/search.svg";
@@ -9,8 +11,36 @@ import sun from "../../assets/sun.svg";
 import Navbar from "../../components/Navbar";
 import Select from "../../components/Select";
 import Table from "../../components/Table";
+import { useUserContext } from "../../context/userContext";
 
 const Home = () => {
+  const { userInfo, fetchUser } = useUserContext();
+  const [account, setAccount] = useState({});
+  const [transactions, setTransactions] = useState([]);
+
+  const fetchAccountData = async () => {
+    try {
+      const res = await getAccount();
+      setAccount(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchTransactions = async () => {
+    try {
+      const res = await getTransaction();
+      setTransactions(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAccountData();
+    fetchTransactions();
+  }, []);
+
   const handleShowCount = () => {
     console.log("show count");
   };
@@ -31,7 +61,7 @@ const Home = () => {
           <div className="flex justify-between items-center mt-10">
             <div className="">
               <p className="text-2xl lg:text-5xl font-bold mb-2 ">
-                Good Morning, Chelsea
+                Good Morning, {userInfo?.name}
               </p>
               <p className="text-lg lg:text-2xl mt-2 font-light">
                 Check all your incoming and outgoing transactions here
@@ -40,7 +70,7 @@ const Home = () => {
             <div className="hidden md:block">
               <div className="flex items-center gap-4">
                 <div className="text-end">
-                  <p className="font-bold">Chelsea Immanuela</p>
+                  <p className="font-bold">{userInfo?.name}</p>
                   <p className="">Personal Account</p>
                 </div>
                 <img
@@ -56,7 +86,7 @@ const Home = () => {
             <div className="lg:col-span-3 px-6 py-2 lg:px-9 lg:pt-10 lg:pb-14 bg-[#0061FF] text-white rounded-xl items-center">
               <div className="flex lg:block justify-between items-center">
                 <p className="font-light text-xl lg:mb-3">Account No.</p>
-                <p className="text-2xl lg:text-3xl">100899</p>
+                <p className="text-2xl lg:text-3xl">{account?.account_no}</p>
               </div>
             </div>
             <div className="lg:col-span-9 bg-white rounded-xl px-3 lg:px-9 lg:pt-10 lg:pb-14">
@@ -65,7 +95,7 @@ const Home = () => {
                   <p className="text-lg font-light lg:mb-3">Balance</p>
                   <div className="flex items-center gap-2">
                     <p className="text-2xl md:text-3xl" id="balance">
-                      Rp 10.000.000,00
+                      Rp {account?.balance}
                     </p>
                     <img id="showHiddenButton" src={show} alt="" width="30" />
                   </div>
@@ -133,24 +163,7 @@ const Home = () => {
                   { name: "Description" },
                   { name: "Amount" },
                 ]}
-                data={[
-                  {
-                    datetime: "3 januari",
-                    type: "Transfer",
-                    fromto: "Mail",
-                    description: "Uang jajan",
-                    amount: "10000",
-                    inout: "in",
-                  },
-                  {
-                    datetime: "3 januari",
-                    type: "Transfer",
-                    fromto: "Mail",
-                    description: "Uang jajan",
-                    amount: "10000",
-                    inout: "out",
-                  },
-                ]}
+                data={transactions}
               />
             </div>
           </section>

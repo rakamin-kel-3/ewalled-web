@@ -1,6 +1,18 @@
 import React from "react";
 
 const Table = ({ tableHeads, data }) => {
+  const getFormattedDate = (inp) => {
+    const date = new Date(inp);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
+
   return (
     <div className="w-full overflow-auto">
       <table className="min-w-full table-auto border-collapse border border-[#EDEDED]">
@@ -25,7 +37,7 @@ const Table = ({ tableHeads, data }) => {
                 <td
                   className={`border border-[#EDEDED] ${bg} text-[#252B42] px-4 py-3 font-light`}
                 >
-                  {d.datetime}
+                  {getFormattedDate(d.createdAt)}
                 </td>
                 <td
                   className={`border border-[#EDEDED] ${bg} text-[#252B42] px-4 py-3 font-light`}
