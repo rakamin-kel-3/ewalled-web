@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://ewalled-service.onrender.com";
+const BASE_URL = "https://savings-spell-md-trick.trycloudflare.com";
 
 export default axios.create({
   baseURL: BASE_URL,
