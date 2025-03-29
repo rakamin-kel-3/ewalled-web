@@ -15,7 +15,7 @@ const Select = ({ onChange, name, placeholder, option }) => {
     const e = {
       target: {
         name,
-        value: item.name,
+        value: item.value,
       },
     };
     onChange(e);
