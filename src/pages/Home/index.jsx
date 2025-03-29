@@ -9,6 +9,7 @@ import send from "../../assets/send.svg";
 import show from "../../assets/show.svg";
 import sun from "../../assets/sun.svg";
 import Navbar from "../../components/Navbar";
+import Pagination from "../../components/Pagination";
 import Select from "../../components/Select";
 import Table from "../../components/Table";
 import { useUserContext } from "../../context/userContext";
@@ -17,6 +18,11 @@ const Home = () => {
   const { userInfo } = useUserContext();
   const [account, setAccount] = useState({});
   const [transactions, setTransactions] = useState([]);
+  const [count, setCount] = useState(10);
+  const [page, setPage] = useState(0);
+  const [pagination, setPagination] = useState({});
+  const [sort, setSort] = useState("desc");
+  const [sortBy, setSortBy] = useState("createdAt");
 
   const fetchAccountData = async () => {
     try {
@@ -29,8 +35,9 @@ const Home = () => {
 
   const fetchTransactions = async () => {
     try {
-      const res = await getTransaction();
+      const res = await getTransaction(page, count, sort, sortBy);
       setTransactions(res.data.data);
+      setPagination(res.data.pagination);
     } catch (error) {
       console.log(error);
     }
@@ -39,18 +46,18 @@ const Home = () => {
   useEffect(() => {
     fetchAccountData();
     fetchTransactions();
-  }, []);
+  }, [count, page, sort, sortBy]);
 
-  const handleShowCount = () => {
-    console.log("show count");
+  const handleShowCount = (e) => {
+    setCount(e.target.value);
   };
 
-  const handleSortBy = () => {
-    console.log("show count");
+  const handleSort = (e) => {
+    setSort(e.target.value);
   };
 
-  const handleSortByType = () => {
-    console.log("show count");
+  const handleSortBy = (e) => {
+    setSortBy(e.target.value);
   };
 
   return (
@@ -132,8 +139,9 @@ const Home = () => {
                     name="type"
                     onChange={handleShowCount}
                     option={[
-                      { id: 1, name: "Last 50 Transaction" },
-                      { id: 2, name: "Last 100 Transaction" },
+                      { id: 1, name: "Last 10 Transaction", value: 10 },
+                      { id: 2, name: "Last 30 Transaction", value: 30 },
+                      { id: 3, name: "Last 50 Transaction", value: 50 },
                     ]}
                   />
                 </div>
@@ -143,13 +151,19 @@ const Home = () => {
                     placeholder="Date"
                     name="type"
                     onChange={handleSortBy}
-                    option={[{ id: 1, name: "Amount" }]}
+                    option={[
+                      { id: 1, name: "Date", value: "createdAt" },
+                      { id: 2, name: "Amount", value: "amount" },
+                    ]}
                   />
                   <Select
                     placeholder="Descending"
                     name="type"
-                    onChange={handleSortByType}
-                    option={[{ id: 1, name: "Ascending" }]}
+                    onChange={handleSort}
+                    option={[
+                      { id: 1, name: "Descending", value: "desc" },
+                      { id: 2, name: "Ascending", value: "asc" },
+                    ]}
                   />
                 </div>
               </div>
@@ -164,6 +178,15 @@ const Home = () => {
                   { name: "Amount" },
                 ]}
                 data={transactions}
+              />
+              <Pagination
+                totalPages={pagination.totalPages}
+                currentPage={pagination.currentPage}
+                hasNext={pagination.hasNext}
+                hasPrevious={pagination.hasPrevious}
+                onPageChange={(i) => setPage(i)}
+                onNext={() => setPage(page + 1)}
+                onPrev={() => setPage(page - 1)}
               />
             </div>
           </section>
