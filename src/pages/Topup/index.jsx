@@ -4,6 +4,7 @@ import { topup } from "../../api/model/transaction";
 import Button from "../../components/Button/button";
 import Input from "../../components/Input";
 import Navbar from "../../components/Navbar";
+import SelecLabel from "../../components/SelectLabel";
 import TransactionModal from "../../components/TransactionModal";
 import useSnackbar from "../../hooks/useSnackbar";
 
@@ -59,23 +60,16 @@ const Topup = () => {
                       </span>
                     )}
                   </div>
-                  <div className="flex pe-10 shadow-input rounded-3xl bg-light mt-8">
-                    <p className="px-10 py-4 font-bold text-xl bg-[#EDEDED] rounded-3xl">
-                      From
-                    </p>
-                    <select
-                      name="paymentMethod"
-                      className="text-md font-light w-full ps-10 bg-light focus:outline-none"
-                      id="paymentMethod"
-                      {...register("paymentMethod", { required: true })}
-                    >
-                      <option value="" disabled selected>
-                        Select payment method
-                      </option>
-                      <option value="cc">Credit Card</option>
-                      <option value="byondpay">BYOND Pay</option>
-                    </select>
-                  </div>
+                  <SelecLabel
+                    label="From"
+                    name="paymentMethod"
+                    options={[
+                      { name: "Credit Card", value: "cc" },
+                      { name: "Byond PAY", value: "byondpay" },
+                    ]}
+                    labelDefault={"Select payment method"}
+                    {...register("paymentMethod", { required: true })}
+                  />
                   {errors.paymentMethod && (
                     <span className="text-sm text-red-600">
                       payment method wajib diisi

@@ -5,6 +5,7 @@ import { transfer } from "../../api/model/transaction";
 import Button from "../../components/Button/button";
 import Input from "../../components/Input";
 import Navbar from "../../components/Navbar";
+import SelecLabel from "../../components/SelectLabel";
 import TransactionModal from "../../components/TransactionModal";
 import useSnackbar from "../../hooks/useSnackbar";
 
@@ -67,26 +68,16 @@ const Transfer = () => {
               <h1 className="text-xl lg:text-3xl font-bold mb-2">Transfer</h1>
               <div className="p-3 md:p-10 bg-white rounded-3xl">
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
-                  <div className="flex pe-10 shadow-input rounded-3xl bg-light">
-                    <p className="px-10 py-4 font-bold text-xl bg-[#EDEDED] rounded-3xl">
-                      To
-                    </p>
-                    <select
-                      name="transfer"
-                      className="text-md font-light w-full ps-10 bg-light focus:outline-none"
-                      id="transfer"
-                      {...register("receipentAccountNo", { required: true })}
-                    >
-                      <option value="" disabled selected>
-                        Select receipent account
-                      </option>
-                      {accounts?.map((item, key) => (
-                        <option key={key} value={item.accountNo}>
-                          {item.accountNo} ({item.name})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  <SelecLabel
+                    label="To"
+                    name="receipentAccountNo"
+                    options={accounts?.map((item) => ({
+                      name: `${item.accountNo} (${item.name})`,
+                      value: item.accountNo,
+                    }))}
+                    labelDefault={"Select receipent account"}
+                    {...register("receipentAccountNo", { required: true })}
+                  />
                   {errors.receipentAccountNo && (
                     <span className="text-sm text-red-600">
                       Receipent Account wajib diisi
