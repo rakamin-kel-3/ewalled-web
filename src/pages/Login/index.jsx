@@ -24,7 +24,7 @@ const Login = () => {
     try {
       setIsLoading(true);
       const res = await loginUser(d.email, d.password);
-      login(res.data.data);
+      login(res.data.data.token);
       snackbar.success("Selamat Datang!");
     } catch (error) {
       snackbar.error(error.response?.data.metadata.message);

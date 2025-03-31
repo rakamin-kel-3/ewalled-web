@@ -5,7 +5,7 @@ export const loginUser = (email, password) => {
     email: email,
     password: password,
   };
-  return coreApi.post("/public/login", param);
+  return coreApi.post("/auth/login", param);
 };
 
 export const registerUser = (name, email, password, phoneNumber) => {
@@ -15,7 +15,7 @@ export const registerUser = (name, email, password, phoneNumber) => {
     password: password,
     phoneNumber: phoneNumber,
   };
-  return coreApi.post("/public/register", param);
+  return coreApi.post("/auth/register", param);
 };
 
 export const me = () => {
