@@ -22,7 +22,6 @@ export const UserWrapper = ({ children }) => {
   const snackbar = useSnackbar();
 
   const login = (token) => {
-    console.log("masuk ke login");
     coreApi.interceptors.request.use((config) => {
       config.headers.Authorization = `Bearer ${token}`;
       return config;
