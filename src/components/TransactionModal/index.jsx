@@ -50,17 +50,31 @@ export default function TransactionModal({ open, setOpen, data }) {
                         {data?.transactionId}
                       </p>
                     </div>
+                    {data?.accountFrom && (
+                      <div className="flex justify-between items-center mb-3">
+                        <p className="text-md font-light">From</p>
+                        <p className="text-md font-light">
+                          {data?.accountFrom}
+                        </p>
+                      </div>
+                    )}
+                    {data?.accountTo && (
+                      <div className="flex justify-between items-center mb-3">
+                        <p className="text-md font-light">To</p>
+                        <p className="text-md font-light">{data?.accountTo}</p>
+                      </div>
+                    )}
+                    {data?.description && (
+                      <div className="flex justify-between items-center mb-3">
+                        <p className="text-md font-light">Description</p>
+                        <p className="text-md font-light">
+                          {data?.description}
+                        </p>
+                      </div>
+                    )}
                     <div className="flex justify-between items-center mb-3">
-                      <p className="text-md font-light">From</p>
-                      <p className="text-md font-light">{data?.accountFrom}</p>
-                    </div>
-                    <div className="flex justify-between items-center mb-3">
-                      <p className="text-md font-light">To</p>
-                      <p className="text-md font-light">{data?.accountTo}</p>
-                    </div>
-                    <div className="flex justify-between items-center mb-3">
-                      <p className="text-md font-light">Description</p>
-                      <p className="text-md font-light">{data?.description}</p>
+                      <p className="text-md font-light">Category</p>
+                      <p className="text-md font-light">{data?.category}</p>
                     </div>
                   </div>
                 </div>
