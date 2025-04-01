@@ -11,11 +11,12 @@ export const getTransaction = (
   );
 };
 
-export const transfer = (receipentAccountNo, amount, notes) => {
+export const transfer = (receipentAccountNo, amount, notes, category) => {
   const param = {
     receipentAccountNo: receipentAccountNo,
     amount: amount,
     notes: notes,
+    category: category,
   };
   return coreApi.post("/transactions/transfer", param);
 };
