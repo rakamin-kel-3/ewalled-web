@@ -8,6 +8,7 @@ import Topup from "../pages/Topup";
 import Transfer from "../pages/Transfer";
 import AuthRoute from "./AuthRoute";
 import ProtectedRoute from "./ProtectedRoute";
+import AddLogs from "../pages/AddLogs";
 
 const Routers = () => {
   return (
@@ -17,11 +18,13 @@ const Routers = () => {
           <Route element={<AuthRoute />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/add-logs" element={<AddLogs />} />
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Home />} />
             <Route path="/transfer" element={<Transfer />} />
             <Route path="/topup" element={<Topup />} />
+
           </Route>
           {/* <Route path="/pokedetail/:id" element={<PokeDetail />} /> */}
         </Routes>
