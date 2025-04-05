@@ -8,6 +8,8 @@ import Topup from "../pages/Topup";
 import Transfer from "../pages/Transfer";
 import AuthRoute from "./AuthRoute";
 import ProtectedRoute from "./ProtectedRoute";
+import Dashboard from "../pages/Dashboard";
+import Graph from "../pages/Graph";
 
 const Routers = () => {
   return (
@@ -17,6 +19,8 @@ const Routers = () => {
           <Route element={<AuthRoute />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/graph" element={<Graph />} />
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Home />} />
