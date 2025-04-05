@@ -10,6 +10,7 @@ import AuthRoute from "./AuthRoute";
 import ProtectedRoute from "./ProtectedRoute";
 import Dashboard from "../pages/Dashboard";
 import Graph from "../pages/Graph";
+import AddLogs from "../pages/AddLogs";
 
 const Routers = () => {
   return (
@@ -21,11 +22,13 @@ const Routers = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/graph" element={<Graph />} />
+            <Route path="/add-logs" element={<AddLogs />} />
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Home />} />
             <Route path="/transfer" element={<Transfer />} />
             <Route path="/topup" element={<Topup />} />
+
           </Route>
           {/* <Route path="/pokedetail/:id" element={<PokeDetail />} /> */}
         </Routes>
