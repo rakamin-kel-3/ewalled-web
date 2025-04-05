@@ -8,6 +8,8 @@ import Topup from "../pages/Topup";
 import Transfer from "../pages/Transfer";
 import AuthRoute from "./AuthRoute";
 import ProtectedRoute from "./ProtectedRoute";
+import Dashboard from "../pages/Dashboard";
+import Graph from "../pages/Graph";
 import AddLogs from "../pages/AddLogs";
 
 const Routers = () => {
@@ -18,6 +20,8 @@ const Routers = () => {
           <Route element={<AuthRoute />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/graph" element={<Graph />} />
             <Route path="/add-logs" element={<AddLogs />} />
           </Route>
           <Route element={<ProtectedRoute />}>
