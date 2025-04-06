@@ -44,7 +44,7 @@ const Pagination = ({
   };
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white py-3">
+    <div className="flex items-center justify-between border-t border-gray-200 py-3">
       <div className="flex flex-1 justify-between sm:hidden">
         <button
           disabled={!hasPrevious}

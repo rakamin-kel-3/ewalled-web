@@ -44,6 +44,7 @@ const Login = () => {
                 type={"text"}
                 name={"email"}
                 placeholder={"Email"}
+                classname={"w-full"}
                 {...register("email", { required: true })}
               />
               {errors.email && (
@@ -55,6 +56,7 @@ const Login = () => {
                 type={"password"}
                 name={"password"}
                 placeholder={"Password"}
+                classname={"w-full"}
                 {...register("password", { required: true })}
               />
               {errors.password && (
