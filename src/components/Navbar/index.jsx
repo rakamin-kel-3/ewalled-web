@@ -2,19 +2,32 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3Icon,
+  ChevronDownIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import React from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import logo from "../../assets/logo.svg";
 import sunLight from "../../assets/sun-light.svg";
 import { useUserContext } from "../../context/userContext";
 
 const navigation = [
-  { name: "Dashboard", href: "/" },
+  { name: "Home", href: "/" },
   { name: "Transfer", href: "/transfer" },
   { name: "Topup", href: "/topup" },
+];
+
+const naviagtionMoneyLogs = [
+  { name: "Dashboard", href: "/Dashboard" },
+  { name: "Graph", href: "/graph" },
 ];
 
 export const Navbar = () => {
@@ -46,23 +59,84 @@ export const Navbar = () => {
           <div className="hidden sm:block absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {/* Profile dropdown */}
             <div className="flex lg:space-x-7 md:space-x-4 space-x-1 items-center">
-              {navigation.map((item) => (
-                <NavLink
-                  key={item.name}
-                  to={item.href}
-                  aria-current={item.current ? "page" : undefined}
-                  className={({ isActive }) => {
-                    return classNames(
-                      isActive
-                        ? "text-[#0061FF]"
-                        : "text-black hover:text-[#0061FF",
-                      "rounded-md px-3 py-2 text-sm font-medium"
-                    );
-                  }}
+              <NavLink
+                key="dashboard"
+                to="/"
+                className={({ isActive }) => {
+                  return classNames(
+                    isActive
+                      ? "text-[#0061FF]"
+                      : "text-black hover:text-[#0061FF",
+                    "rounded-md px-3 py-2 text-sm font-medium"
+                  );
+                }}
+              >
+                Home
+              </NavLink>
+              <Menu as="div" className="relative inline-block text-left">
+                <MenuButton className="flex gap-x-2 items-center text-sm">
+                  Transaction
+                  <ChevronDownIcon
+                    aria-hidden="true"
+                    className="-mr-1 size-5 text-gray-400"
+                  />
+                </MenuButton>
+                <MenuItems
+                  transition
+                  className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                 >
-                  {item.name}
-                </NavLink>
-              ))}
+                  <div className="py-1">
+                    <MenuItem>
+                      <Link
+                        to="/transfer"
+                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                      >
+                        Transfer
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link
+                        to="/topup"
+                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                      >
+                        Top Up
+                      </Link>
+                    </MenuItem>
+                  </div>
+                </MenuItems>
+              </Menu>
+              <Menu as="div" className="relative inline-block text-left">
+                <MenuButton className="flex gap-x-2 items-center text-sm">
+                  Money Logs
+                  <ChevronDownIcon
+                    aria-hidden="true"
+                    className="-mr-1 size-5 text-gray-400"
+                  />
+                </MenuButton>
+                <MenuItems
+                  transition
+                  className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                >
+                  <div className="py-1">
+                    <MenuItem>
+                      <Link
+                        to="/dashboard"
+                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                      >
+                        Dashboard
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link
+                        to="/graph"
+                        className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                      >
+                        Graph
+                      </Link>
+                    </MenuItem>
+                  </div>
+                </MenuItems>
+              </Menu>
               <button
                 className="text-black hover:text-[#0061FF] rounded-md px-3 py-2 text-sm font-medium"
                 onClick={logout}
@@ -77,7 +151,7 @@ export const Navbar = () => {
       </div>
 
       <DisclosurePanel className="sm:hidden">
-        <div className="space-y-1 px-2 pt-2 pb-3">
+        <div className="space-y-1 px-2 pt-2 pb-3 border-b-1 border-[#e5e5e5]">
           {navigation.map((item) => (
             <DisclosureButton
               key={item.name}
@@ -94,6 +168,34 @@ export const Navbar = () => {
               {item.name}
             </DisclosureButton>
           ))}
+        </div>
+        <div className="space-y-1 px-2 pt-2 pb-3 border-b-1 border-[#e5e5e5]">
+          {naviagtionMoneyLogs.map((item) => (
+            <DisclosureButton
+              key={item.name}
+              as="a"
+              href={item.href}
+              aria-current={item.current ? "page" : undefined}
+              className={classNames(
+                item.current
+                  ? "text-[#0061FF]"
+                  : "text-black hover:text-[#0061FF]",
+                "block rounded-md px-3 py-2 text-base font-medium"
+              )}
+            >
+              {item.name}
+            </DisclosureButton>
+          ))}
+        </div>
+        <div className="space-y-1 px-2 pt-2 pb-3">
+          <DisclosureButton
+            key={"logout"}
+            onClick={logout}
+            aria-current={"page"}
+            className="text-black hover:text-[#0061FF] block rounded-md px-3 py-2 text-base font-medium"
+          >
+            Sign Out
+          </DisclosureButton>
         </div>
       </DisclosurePanel>
     </Disclosure>
