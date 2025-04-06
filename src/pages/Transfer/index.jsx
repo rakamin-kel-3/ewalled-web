@@ -116,27 +116,31 @@ const Transfer = () => {
                       name="notes"
                       placeholder="Notes:"
                       rounded="3xl"
+                      classname={"w-full"}
                       {...register("notes", { required: false })}
                     />
                   </div>
-                  <SelecLabel
-                    label="Category"
-                    name="category"
-                    options={[
-                      { name: "Shopping", value: "shopping" },
-                      { name: "Food", value: "food" },
-                      { name: "Transport", value: "transport" },
-                      { name: "Hobbies", value: "hobbies" },
-                      { name: "Etc", value: "etc" },
-                    ]}
-                    labelDefault={"Select category"}
-                    {...register("category", { required: true })}
-                  />
-                  {errors.category && (
-                    <span className="text-sm text-red-600">
-                      Category wajib diisi
-                    </span>
-                  )}
+                  <div className="mt-8">
+                    <SelecLabel
+                      label="Category"
+                      name="category"
+                      options={[
+                        { name: "Shopping", value: "shopping" },
+                        { name: "Food", value: "food" },
+                        { name: "Transport", value: "transport" },
+                        { name: "Hobbies", value: "hobbies" },
+                        { name: "Study", value: "study" },
+                        { name: "Etc", value: "etc" },
+                      ]}
+                      labelDefault={"Select category"}
+                      {...register("category", { required: true })}
+                    />
+                    {errors.category && (
+                      <span className="text-sm text-red-600">
+                        Category wajib diisi
+                      </span>
+                    )}
+                  </div>
                   <div className="w-full mt-14">
                     <Button
                       label="Transfer"

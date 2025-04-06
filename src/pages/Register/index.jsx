@@ -44,6 +44,7 @@ const Register = () => {
                 type={"text"}
                 name={"name"}
                 placeholder={"Nama Lengkap"}
+                classname={"w-full"}
                 {...register("name", { required: true })}
               />
               {errors.name && (
@@ -55,6 +56,7 @@ const Register = () => {
                 type={"email"}
                 name={"email"}
                 placeholder={"Email"}
+                classname={"w-full"}
                 {...register("email", { required: true })}
               />
               {errors.email && (
@@ -65,6 +67,7 @@ const Register = () => {
               <Input
                 type={"password"}
                 name={"password"}
+                classname={"w-full"}
                 placeholder={"Password"}
                 {...register("password", { required: true })}
               />
@@ -79,6 +82,7 @@ const Register = () => {
                 type={"number"}
                 name={"phoneNumber"}
                 placeholder={"No Hp"}
+                classname={"w-full"}
                 {...register("phoneNumber", { required: true })}
               />
               {errors.phoneNumber && (

@@ -5,16 +5,15 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React from "react";
 
-const Select = ({ onChange, name, placeholder, option }) => {
-  const [selected, setSelected] = useState({ name: placeholder });
+const Select = ({ onChange, placeholder, option, value }) => {
+  const selected = value || { name: placeholder };
 
   const handleSelect = (item) => {
-    setSelected(item);
     const e = {
       target: {
-        name,
+        name: item.name,
         value: item.value,
       },
     };
