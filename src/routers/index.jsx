@@ -4,7 +4,6 @@ import { UserWrapper } from "../context/userContext";
 import AddLogs from "../pages/AddLogs";
 import Dashboard from "../pages/Dashboard";
 import Graph from "../pages/Graph";
-import Graphmail from "../pages/Graphmail";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -27,7 +26,6 @@ const Routers = () => {
             <Route path="/transfer" element={<Transfer />} />
             <Route path="/topup" element={<Topup />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/graphmail" element={<Graphmail />} />
             <Route path="/graph" element={<Graph />} />
             <Route path="/add-logs" element={<AddLogs />} />
           </Route>
