@@ -19,7 +19,7 @@ const Input = (
       ref={ref}
       className={classNames(
         classname,
-        `rounded-${rounded} px-5 py-4 bg-[#FAFBFD] text-black w-full text-md placeholder:font-semibold placeholder:text-black`
+        `rounded-${rounded} px-5 py-4 bg-[#FAFBFD] text-black text-md placeholder:font-semibold placeholder:text-black`
       )}
       type={type}
       name={name}

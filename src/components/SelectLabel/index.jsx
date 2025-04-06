@@ -1,9 +1,16 @@
 import React from "react";
 
-const SelecLabel = ({ label, name, options, labelDefault, ...rest }, ref) => {
+const SelecLabel = (
+  { label, name, options, labelDefault, labelColor, labelBgColor, ...rest },
+  ref
+) => {
   return (
-    <div className="flex pe-10 shadow-input rounded-3xl bg-light mt-8">
-      <p className="px-10 py-4 font-bold text-xl bg-[#EDEDED] rounded-3xl">
+    <div className="flex pe-10 shadow-input rounded-3xl bg-light">
+      <p
+        className={`px-10 py-4 font-bold text-xl ${
+          labelBgColor ?? "bg-[#EDEDED]"
+        } ${labelColor ?? "text-black"} rounded-3xl`}
+      >
         {label}
       </p>
       <select

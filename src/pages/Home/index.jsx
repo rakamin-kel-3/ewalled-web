@@ -18,11 +18,12 @@ const Home = () => {
   const { userInfo } = useUserContext();
   const [account, setAccount] = useState({});
   const [transactions, setTransactions] = useState([]);
-  const [count, setCount] = useState(10);
+  const [errorMsg, setErrorMsg] = useState("");
   const [page, setPage] = useState(0);
   const [pagination, setPagination] = useState({});
-  const [sort, setSort] = useState("desc");
-  const [sortBy, setSortBy] = useState("createdAt");
+  const [limit, setLimit] = useState({ name: "10 Transaction", value: 10 });
+  const [sort, setSort] = useState({ name: "Descending", value: "desc" });
+  const [sortBy, setSortBy] = useState({ name: "Date", value: "createdAt" });
 
   const fetchAccountData = async () => {
     try {
@@ -35,29 +36,57 @@ const Home = () => {
 
   const fetchTransactions = async () => {
     try {
-      const res = await getTransaction(page, count, sort, sortBy);
+      const res = await getTransaction(
+        page,
+        limit.value,
+        sort.value,
+        sortBy.value
+      );
       setTransactions(res.data.data);
       setPagination(res.data.pagination);
     } catch (error) {
-      console.log(error);
+      if (!error.response?.data.metadata.success) {
+        setTransactions([]);
+        setErrorMsg(error.response?.data.metadata.message);
+      }
     }
+  };
+
+  const getFormattedDate = (inp) => {
+    const date = new Date(inp);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
+
+  const formatToIDR = (amount) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 2,
+    }).format(amount);
   };
 
   useEffect(() => {
     fetchAccountData();
     fetchTransactions();
-  }, [count, page, sort, sortBy]);
+  }, [limit, page, sort, sortBy]);
 
   const handleShowCount = (e) => {
-    setCount(e.target.value);
+    setLimit(e.target);
   };
 
   const handleSort = (e) => {
-    setSort(e.target.value);
+    setSort(e.target);
   };
 
   const handleSortBy = (e) => {
-    setSortBy(e.target.value);
+    setSortBy(e.target);
   };
 
   return (
@@ -135,31 +164,34 @@ const Home = () => {
                 <div className="flex gap-x-3 items-center">
                   <p className="text-[#737373] font-light">Show</p>
                   <Select
-                    placeholder="Last 10 Transaction"
+                    placeholder={limit.name}
                     name="type"
                     onChange={handleShowCount}
+                    value={limit}
                     option={[
-                      { id: 1, name: "Last 10 Transaction", value: 10 },
-                      { id: 2, name: "Last 30 Transaction", value: 30 },
-                      { id: 3, name: "Last 50 Transaction", value: 50 },
+                      { id: 1, name: "10 Transaction", value: 10 },
+                      { id: 2, name: "30 Transaction", value: 30 },
+                      { id: 3, name: "50 Transaction", value: 50 },
                     ]}
                   />
                 </div>
                 <div className="flex gap-x-3 items-center mt-3 sm:mt-0">
                   <p className="text-[#737373] font-light">Sort By</p>
                   <Select
-                    placeholder="Date"
+                    placeholder={sortBy.name}
                     name="type"
                     onChange={handleSortBy}
+                    value={sortBy}
                     option={[
                       { id: 1, name: "Date", value: "createdAt" },
                       { id: 2, name: "Amount", value: "amount" },
                     ]}
                   />
                   <Select
-                    placeholder="Descending"
+                    placeholder={sort.name}
                     name="type"
                     onChange={handleSort}
+                    value={sort}
                     option={[
                       { id: 1, name: "Descending", value: "desc" },
                       { id: 2, name: "Ascending", value: "asc" },
@@ -177,8 +209,28 @@ const Home = () => {
                   { name: "Description" },
                   { name: "Amount" },
                 ]}
-                data={transactions}
-              />
+              >
+                {errorMsg == "" &&
+                  transactions?.map((item, key) => {
+                    const fc =
+                      item.inout == "out" ? "text-red-600" : "text-green-600";
+                    const bg = key % 2 == 0 ? "bg-[#F6F6F6]" : "bg-white";
+                    return (
+                      <Table.Row key={key} classname={bg}>
+                        <Table.Cell>
+                          {getFormattedDate(item.createdAt)}
+                        </Table.Cell>
+                        <Table.Cell>{item.type}</Table.Cell>
+                        <Table.Cell>{item.fromto}</Table.Cell>
+                        <Table.Cell>{item.description}</Table.Cell>
+                        <Table.Cell classname={fc}>
+                          {item.type == "expense" ? "-" : "+"}{" "}
+                          {formatToIDR(item.amount)}
+                        </Table.Cell>
+                      </Table.Row>
+                    );
+                  })}
+              </Table>
               <Pagination
                 totalPages={pagination.totalPages}
                 currentPage={pagination.currentPage}

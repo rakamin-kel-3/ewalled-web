@@ -60,27 +60,30 @@ const Topup = () => {
                       </span>
                     )}
                   </div>
-                  <SelecLabel
-                    label="From"
-                    name="paymentMethod"
-                    options={[
-                      { name: "Credit Card", value: "cc" },
-                      { name: "Byond PAY", value: "byondpay" },
-                    ]}
-                    labelDefault={"Select payment method"}
-                    {...register("paymentMethod", { required: true })}
-                  />
-                  {errors.paymentMethod && (
-                    <span className="text-sm text-red-600">
-                      payment method wajib diisi
-                    </span>
-                  )}
+                  <div className="mt-8">
+                    <SelecLabel
+                      label="From"
+                      name="paymentMethod"
+                      options={[
+                        { name: "Credit Card", value: "cc" },
+                        { name: "Byond PAY", value: "byondpay" },
+                      ]}
+                      labelDefault={"Select payment method"}
+                      {...register("paymentMethod", { required: true })}
+                    />
+                    {errors.paymentMethod && (
+                      <span className="text-sm text-red-600">
+                        payment method wajib diisi
+                      </span>
+                    )}
+                  </div>
                   <div className="w-full mt-8">
                     <Input
                       type="text"
                       name="notes"
                       placeholder="Notes:"
                       rounded="3xl"
+                      classname={"w-full"}
                       {...register("notes", { required: false })}
                     />
                   </div>

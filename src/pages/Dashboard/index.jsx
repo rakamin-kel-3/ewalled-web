@@ -1,66 +1,73 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import { Link } from "react-router";
+import { getAccount } from "../../api/model/account";
+import { getSummary } from "../../api/model/money-logs";
+import iconlogo from "../../assets/iconlogo.svg";
 import Navbar from "../../components/Navbar";
-import Table from "../../components/Table";
-import { useState } from "react";
-import seedrandom from "seedrandom";
 import Select from "../../components/Select";
-import Pagination from "../../components/Pagination";
+import Table from "../../components/Table";
 
 const Dashboard = () => {
-  const tableHeads = [
-    { name: "Date & Time" },
-    { name: "Type" },
-    { name: "Category" },
-    { name: "Description" },
-    { name: "Amount" },
-  ];
+  const defaultMonth = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
 
-  const generateDummyData = (seed = "my-seed") => {
-    const rng = seedrandom(seed); // Create a seeded RNG
-    const types = ["Income", "Expense"];
-    const Categories = [
-      "Food and Drink",
-      "Transportation",
-      "Wages",
-      "Life and Entertainment",
-    ];
-    const names = ["John", "Spongebob", "Anwar", "Sendy", "Joko", "Bank BCA"];
-    const descriptions = [
-      "Lunch",
-      "Coffee",
-      "Shopping",
-      "Topup via VA",
-      "Subscription",
-      "Transfer",
-    ];
+    const start = new Date(year, month, 1).toLocaleDateString("sv-SE");
+    const end = new Date(year, month + 1, 0).toLocaleDateString("sv-SE");
 
-    return Array.from({ length: 20 }, (_, i) => {
-      const type = types[Math.floor(rng() * types.length)];
-      const isIn = type === "Income";
-      return {
-        createdAt: new Date(2025, 2, 30, 14, i).toISOString(),
-        type,
-        fromto: Categories[Math.floor(rng() * Categories.length)],
-        description: descriptions[Math.floor(rng() * descriptions.length)],
-        amount: Math.floor(rng() * 1000000) + 50000,
-        inout: isIn ? "in" : "out",
-      };
-    });
+    return {
+      start: start,
+      end: end,
+      m: now.toLocaleString("default", { month: "long" }),
+    };
   };
 
-  const dummyData = generateDummyData("1");
+  const { start, end, m } = defaultMonth();
+  const [account, setAccount] = useState({});
+  const [summary, setSummary] = useState({});
+  const [errorMsg, setErrorMsg] = useState("");
+  const [startDate, setStartDate] = useState(start);
+  const [endDate, setEndDate] = useState(end);
+  const [month, setMonth] = useState(m);
+  const [week, setWeek] = useState({ name: "Full Month", value: "full" });
+  const [isBalanceShow, setIsBalanceShow] = useState(true);
+  const Icons = {
+    balance: isBalanceShow ? EyeIcon : EyeSlashIcon,
+  };
 
-  const totals = dummyData.reduce(
-    (acc, item) => {
-      if (item.inout === "in") {
-        acc.in += item.amount;
-      } else {
-        acc.out += item.amount;
+  const fetchSummary = async () => {
+    try {
+      const res = await getSummary(startDate, endDate);
+      setSummary(res.data.data);
+      setErrorMsg("");
+    } catch (error) {
+      if (!error.response?.data.metadata.success) {
+        setSummary({});
+        setErrorMsg(error.response?.data.metadata.message);
       }
-      return acc;
-    },
-    { in: 0, out: 0 }
-  );
+    }
+  };
+
+  const fetchAccountData = async () => {
+    try {
+      const res = await getAccount();
+      setAccount(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getFormattedDate = (inp) => {
+    const [day, month, year] = inp.split("/");
+    const date = new Date(`${year}-${month}-${day}`);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   const formatToIDR = (amount) => {
     return new Intl.NumberFormat("id-ID", {
@@ -70,137 +77,185 @@ const Dashboard = () => {
     }).format(amount);
   };
 
-  const [isBalanceShow, setIsBalanceShow] = useState(false);
-  const [isIncomeShow, setIsIncomeShow] = useState(false);
-  const [isExpenseShow, setIsExpenseShow] = useState(false);
-  const Icons = {
-    balance: isBalanceShow ? EyeIcon : EyeSlashIcon,
-    income: isIncomeShow ? EyeIcon : EyeSlashIcon,
-    expense: isExpenseShow ? EyeIcon : EyeSlashIcon,
-  };
-
   const eyeClick = (type) => {
     if (type === "balance") setIsBalanceShow((prev) => !prev);
-    if (type === "income") setIsIncomeShow((prev) => !prev);
-    if (type === "expense") setIsExpenseShow((prev) => !prev);
   };
 
-  const [sortBy, setSortBy] = useState("createdAt");
+  const handleChangeMonth = (e) => {
+    const [year, monthNum] = e.split("-").map(Number);
+    const start = new Date(year, monthNum - 1, 1).toLocaleDateString("sv-SE");
+    const end = new Date(year, monthNum, 0).toLocaleDateString("sv-SE");
 
-  const handleSortBy = (e) => {
-    setSortBy(e.target.value);
+    setMonth(
+      new Date(year, monthNum - 1).toLocaleString("default", { month: "long" })
+    );
+    setStartDate(start);
+    setEndDate(end);
+    setWeek({ name: "Full Month", value: "full" });
   };
 
-  const [count, setCount] = useState(10);
-  const handleShowCount = (e) => {
-    setCount(e.target.value);
+  const handleChangeWeek = (e) => {
+    const val = e.target.value;
+    const [year, monthNum] = startDate.split("-").map(Number);
+    var start, end;
+    switch (val) {
+      case "full":
+        start = new Date(year, monthNum - 1, 1).toLocaleDateString("sv-SE");
+        end = new Date(year, monthNum, 0).toLocaleDateString("sv-SE");
+        break;
+      case "week1":
+        start = new Date(year, monthNum - 1, 1).toLocaleDateString("sv-SE");
+        end = new Date(year, monthNum - 1, 8).toLocaleDateString("sv-SE");
+        break;
+      case "week2":
+        start = new Date(year, monthNum - 1, 9).toLocaleDateString("sv-SE");
+        end = new Date(year, monthNum - 1, 16).toLocaleDateString("sv-SE");
+        break;
+      case "week3":
+        start = new Date(year, monthNum - 1, 17).toLocaleDateString("sv-SE");
+        end = new Date(year, monthNum - 1, 24).toLocaleDateString("sv-SE");
+        break;
+      case "week4":
+        start = new Date(year, monthNum - 1, 25).toLocaleDateString("sv-SE");
+        end = new Date(year, monthNum, 0).toLocaleDateString("sv-SE");
+        break;
+    }
+    setWeek(e.target);
+    setStartDate(start);
+    setEndDate(end);
   };
 
-  const [page, setPage] = useState(0);
-  const [pagination, setPagination] = useState({});
+  useEffect(() => {
+    fetchSummary();
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    fetchAccountData();
+  }, []);
 
   return (
-    <>
+    <div className="relative">
       <Navbar />
-      <div className="bg-[#FAFBFD] min-h-screen flex flex-col space-y-5 px-40">
-        <h1 className="text-3xl font-bold mt-20">Financing Overview</h1>
-        <div className="bg-white flex flex-col rounded-xl py-8 px-12 shadow-md">
-          <div className="flex justify-end">
-            <h2 className="text-gray-500 text-sm">
-              Amount Transaction This Month
-            </h2>
+      <Link
+        to={"/add-logs"}
+        className="fixed bottom-6 right-6 bg-blue-500 px-3 rounded-full text-3xl text-white pb-1"
+      >
+        +
+      </Link>
+      <div className="bg-[#FAFBFD] min-h-screen">
+        <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-8 py-10">
+          <h1 className="text-2xl lg:text-4xl font-bold mb-2">
+            Financing Overview
+          </h1>
+          <div className="bg-white flex flex-col rounded-xl py-8 px-5 md:px-12 shadow-sm mt-10">
+            <div className="flex justify-end">
+              <h2 className="text-[#737373] text-sm">
+                Amount Transaction {month}
+              </h2>
+            </div>
+            <div className="flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-10 mt-8">
+              <div className="flex flex-col pb-5 pe-5 md:pb-0 space-y-1 w-full border-b-1 md:border-b-0 md:border-r-1 border-gray-200">
+                <p className="text-[#737373]">Balance</p>
+                <div className="flex flex-row items-center">
+                  <p className="text-2xl m-0">
+                    {isBalanceShow ? formatToIDR(account?.balance) : "*****"}
+                  </p>
+                  <Icons.balance
+                    className="h-6 text-[#737373] ml-3 hover:text-black"
+                    onClick={() => eyeClick("balance")}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col pb-5 md:pb-0 space-y-1 w-full border-b-1 md:border-b-0 md:border-r-1 border-gray-200">
+                <p className="text-[#737373]">Income</p>
+                <div className="flex flex-row items-center">
+                  <p className="text-2xl m-0">
+                    {formatToIDR(summary.income ?? 0)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col space-y-1 w-full">
+                <p className="text-[#737373]">Expense</p>
+                <div className="flex flex-row items-center">
+                  <p className="text-2xl m-0">
+                    {formatToIDR(summary.expense ?? 0)}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-row space-x-10 mt-8">
-            <div className="flex flex-col space-y-1 w-1/3 border-r-2 border-gray-200">
-              <p className="text-gray-500">Balance</p>
-              <div className="flex flex-row items-center">
-                <p className="text-3xl m-0">
-                  {isBalanceShow
-                    ? formatToIDR(totals.in + totals.out)
-                    : "*****"}
-                </p>
-                <Icons.balance
-                  className="h-6 text-gray-500 ml-3 hover:text-black"
-                  onClick={() => eyeClick("balance")}
-                />
+          <div>
+            <div className="mt-4 py-12 px-5 md:px-12 bg-white rounded-xl shadow-md">
+              <div className="flex flex-col space-y-5 md:flex-row justify-end mb-8">
+                <div className="flex flex-row items-center space-x-3">
+                  <p className="text-[#737373] font-light">Month</p>
+                  <input
+                    className="bg-white shadow-input rounded-lg py-3 px-5 text-left text-[#737373] sm:text-sm/6"
+                    type="month"
+                    onChange={(e) => handleChangeMonth(e.target.value)}
+                    name="month"
+                    defaultValue={new Date().toISOString().slice(0, 7)}
+                  />
+                  <Select
+                    placeholder={week.name}
+                    name="type"
+                    onChange={handleChangeWeek}
+                    value={week}
+                    option={[
+                      { name: "Full Month", value: "full" },
+                      { name: "Week 1", value: "week1" },
+                      { name: "Week 2", value: "week2" },
+                      { name: "Week 3", value: "week3" },
+                      { name: "Week 4", value: "week4" },
+                    ]}
+                  />
+                </div>
               </div>
+
+              <Table
+                tableHeads={[
+                  { name: "Date" },
+                  { name: "Category" },
+                  { name: "Description" },
+                  { name: "Amount" },
+                ]}
+              >
+                {errorMsg == "" &&
+                  summary.data?.map((item, key) => {
+                    const fc =
+                      item.type == "expense"
+                        ? "text-red-600"
+                        : "text-green-600";
+                    const bg = key % 2 == 0 ? "bg-[#F6F6F6]" : "bg-white";
+                    return (
+                      <Table.Row key={key} classname={bg}>
+                        <Table.Cell>
+                          <p className="flex gap-x-2 px-2">
+                            {getFormattedDate(item.date)}
+                            {item.transaction && (
+                              <img src={iconlogo} width={15} />
+                            )}
+                          </p>
+                        </Table.Cell>
+                        <Table.Cell>{item.category}</Table.Cell>
+                        <Table.Cell>{item.notes}</Table.Cell>
+                        <Table.Cell classname={fc}>
+                          {item.type == "expense" ? "-" : "+"}{" "}
+                          {formatToIDR(item.amount)}
+                        </Table.Cell>
+                      </Table.Row>
+                    );
+                  })}
+              </Table>
+              <p className="text-center mt-5 text-[#737373]">{errorMsg}</p>
             </div>
-
-            <div className="flex flex-col space-y-1 w-1/3 border-r-2 border-gray-200">
-              <p className="text-gray-500">Income</p>
-              <div className="flex flex-row items-center">
-                <p className="text-3xl m-0">
-                  {isIncomeShow ? formatToIDR(totals.in) : "*****"}
-                </p>
-                <Icons.income
-                  className="h-6 text-gray-500 ml-3 hover:text-black"
-                  onClick={() => eyeClick("income")}
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col space-y-1 w-1/3">
-              <p className="text-gray-500">Expense</p>
-              <div className="flex flex-row items-center">
-                <p className="text-3xl m-0">
-                  {isExpenseShow ? formatToIDR(totals.out) : "*****"}
-                </p>
-                <Icons.expense
-                  className="h-6 text-gray-500 ml-3 hover:text-black"
-                  onClick={() => eyeClick("expense")}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div className="mt-4 px-18 py-12 bg-white rounded-xl shadow-md">
-            <div className="flex flex-row justify-between mb-8">
-              <div className="flex flex-row items-center space-x-3">
-                <p>Show</p>
-                <Select
-                  placeholder="Last 10 Transaction"
-                  name="type"
-                  onChange={handleShowCount}
-                  option={[
-                    { id: 1, name: "Last 10 Transaction", value: 10 },
-                    { id: 2, name: "Last 30 Transaction", value: 30 },
-                    { id: 3, name: "Last 50 Transaction", value: 50 },
-                  ]}
-                />
-              </div>
-              <div className="flex flex-row items-center space-x-3">
-                <p>Month</p>
-                <Select
-                  placeholder="Januari 2025"
-                  name="type"
-                  onChange={handleShowCount}
-                  option={[
-                    { id: 1, name: "Januari 2025", value: 10 },
-                    { id: 2, name: "Februari 2025", value: 30 },
-                    { id: 3, name: "Maret 2025", value: 50 },
-                  ]}
-                />
-              </div>
-            </div>
-
-            <Table data={dummyData} tableHeads={tableHeads} />
-
-            <Pagination
-              totalPages={5}
-              currentPage={0}
-              hasNext={true}
-              hasPrevious={false}
-              onPageChange={(i) => setPage(i)}
-              onNext={() => setPage(page + 1)}
-              onPrev={() => setPage(page - 1)}
-            />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
