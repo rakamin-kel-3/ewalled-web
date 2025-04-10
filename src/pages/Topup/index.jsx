@@ -7,6 +7,7 @@ import Navbar from "../../components/Navbar";
 import SelecLabel from "../../components/SelectLabel";
 import TransactionModal from "../../components/TransactionModal";
 import useSnackbar from "../../hooks/useSnackbar";
+import Container from "../../components/Container";
 
 const Topup = () => {
   const {
@@ -42,7 +43,7 @@ const Topup = () => {
             <div className="hidden md:col-span-2 md:block"></div>
             <div className="md:col-span-8">
               <h1 className="text-xl lg:text-3xl font-bold mb-2">Top up</h1>
-              <div className="p-3 md:p-10 bg-white rounded-3xl">
+              <Container>
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
                   <div className="px-10 pt-5 pb-9 bg-[#FAFBFD] rounded-3xl">
                     <p className="font-semibold text-md">Amount</p>
@@ -94,7 +95,7 @@ const Topup = () => {
                     />
                   </div>
                 </form>
-              </div>
+              </Container>
             </div>
             <div className="hidden md:col-span-2  md:block"></div>
           </div>
