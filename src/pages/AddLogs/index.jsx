@@ -8,6 +8,7 @@ import Navbar from "../../components/Navbar";
 import SelecLabel from "../../components/SelectLabel";
 import useSnackbar from "../../hooks/useSnackbar";
 import Container from "../../components/Container";
+import SectionTitle from "../../components/SectionTitle";
 
 const optionsIncome = [
   { name: "Salary", value: "salary" },
@@ -65,9 +66,8 @@ const AddLogs = () => {
 
             <section className="md:col-span-8">
               <div>
-                <h1 className="text-xl font-bold lg:text-3xl mb-2">
-                  Add Money Log
-                </h1>
+                <SectionTitle title="Add Money Log" />
+                
               </div>
 
               <Container>
