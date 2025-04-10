@@ -7,6 +7,7 @@ import Input from "../../components/Input";
 import Navbar from "../../components/Navbar";
 import SelecLabel from "../../components/SelectLabel";
 import useSnackbar from "../../hooks/useSnackbar";
+import Container from "../../components/Container";
 
 const optionsIncome = [
   { name: "Salary", value: "salary" },
@@ -69,7 +70,7 @@ const AddLogs = () => {
                 </h1>
               </div>
 
-              <div className="p-3 md:p-10 bg-white rounded-3xl">
+              <Container>
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
                   <SelecLabel
                     label="Type"
@@ -166,7 +167,7 @@ const AddLogs = () => {
                     />
                   </div>
                 </form>
-              </div>
+              </Container>
             </section>
 
             <aside className="hidden md:col-span-2 md:block"></aside>
