@@ -8,7 +8,8 @@ import Navbar from "../../components/Navbar";
 import SelecLabel from "../../components/SelectLabel";
 import TransactionModal from "../../components/TransactionModal";
 import useSnackbar from "../../hooks/useSnackbar";
-
+import Container from "../../components/Container";
+import SectionTitle from "../../components/SectionTitle";
 const Transfer = () => {
   const {
     register,
@@ -70,8 +71,8 @@ const Transfer = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 mt-20">
             <div className="hidden md:col-span-2 md:block"></div>
             <div className="md:col-span-8">
-              <h1 className="text-xl lg:text-3xl font-bold mb-2">Transfer</h1>
-              <div className="p-3 md:p-10 bg-white rounded-3xl">
+            <SectionTitle title="Transfer" />
+              <Container>
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
                   <SelecLabel
                     label="To"
@@ -148,7 +149,7 @@ const Transfer = () => {
                     />
                   </div>
                 </form>
-              </div>
+              </Container>
             </div>
             <div className="hidden md:col-span-2  md:block"></div>
           </div>

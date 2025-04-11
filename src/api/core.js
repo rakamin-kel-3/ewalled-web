@@ -22,8 +22,8 @@ coreApi.interceptors.response.use(
     const { response } = error;
 
     if (response?.status === 403) {
-      const errorMessage = response.data?.message ?? "";
-      if (errorMessage.toLowerCase().includes("token")) {
+      const errorMessage = response.data?.metadata.message ?? "";
+      if (errorMessage.toLowerCase().includes("token expired")) {
         localStorage.removeItem("ewalled_token");
         window.location.href = "/login";
       }

@@ -3,8 +3,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { createMoneyLogs } from "../../api/model/money-logs";
 import Button from "../../components/Button/button";
+import Container from "../../components/Container";
 import Input from "../../components/Input";
 import Navbar from "../../components/Navbar";
+import SectionTitle from "../../components/SectionTitle";
 import SelecLabel from "../../components/SelectLabel";
 import useSnackbar from "../../hooks/useSnackbar";
 
@@ -64,12 +66,10 @@ const AddLogs = () => {
 
             <section className="md:col-span-8">
               <div>
-                <h1 className="text-xl font-bold lg:text-3xl mb-2">
-                  Add Money Log
-                </h1>
+                <SectionTitle title="Add Money Log" />
               </div>
 
-              <div className="p-3 md:p-10 bg-white rounded-3xl">
+              <Container>
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
                   <SelecLabel
                     label="Type"
@@ -166,7 +166,7 @@ const AddLogs = () => {
                     />
                   </div>
                 </form>
-              </div>
+              </Container>
             </section>
 
             <aside className="hidden md:col-span-2 md:block"></aside>
