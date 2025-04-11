@@ -3,12 +3,12 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { createMoneyLogs } from "../../api/model/money-logs";
 import Button from "../../components/Button/button";
+import Container from "../../components/Container";
 import Input from "../../components/Input";
 import Navbar from "../../components/Navbar";
+import SectionTitle from "../../components/SectionTitle";
 import SelecLabel from "../../components/SelectLabel";
 import useSnackbar from "../../hooks/useSnackbar";
-import Container from "../../components/Container";
-import SectionTitle from "../../components/SectionTitle";
 
 const optionsIncome = [
   { name: "Salary", value: "salary" },
@@ -67,7 +67,6 @@ const AddLogs = () => {
             <section className="md:col-span-8">
               <div>
                 <SectionTitle title="Add Money Log" />
-                
               </div>
 
               <Container>
