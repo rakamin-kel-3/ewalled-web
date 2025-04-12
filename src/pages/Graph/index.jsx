@@ -21,13 +21,10 @@ const Graph = () => {
       m: now.toLocaleString("default", { month: "long" }),
     };
   };
-  // const getColorScale = (count) => {
-  //   return chroma.scale(["#0061FF", "#c8ddff"]).mode("lch").colors(count);
-  // };
 
   const getColorScale = (count) => {
     return chroma
-      .scale(["#0061FF", "#51D600", "#FFF500", "#FF450C"]) // red → yellow → green → blue
+      .scale(["0061FF", "FFE100", "EE7F77"])
       .mode("lch") // or "lab" or "hsl"
       .colors(count);
   };
