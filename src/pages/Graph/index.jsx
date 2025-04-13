@@ -159,7 +159,7 @@ const Graph = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
               <div className="flex justify-center">
                 <DoughnutChart
-                  errorMsg={errorMsgExpense}
+                  errorMsg={errorMsgIncome}
                   data={income}
                   total={formatToIDR(income.totalAmount)}
                   colors={incomeColor}
