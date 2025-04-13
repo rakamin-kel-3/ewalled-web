@@ -4,6 +4,7 @@ import { VictoryLabel, VictoryPie, VictoryTheme } from "victory";
 import { getGraph } from "../../api/model/money-logs";
 import Navbar from "../../components/Navbar";
 import Select from "../../components/Select";
+import DoughnutChart from "../../components/DoughnutChart";
 
 const Graph = () => {
   const defaultMonth = () => {
@@ -20,8 +21,12 @@ const Graph = () => {
       m: now.toLocaleString("default", { month: "long" }),
     };
   };
+
   const getColorScale = (count) => {
-    return chroma.scale(["#0061FF", "#c8ddff"]).mode("lch").colors(count);
+    return chroma
+      .scale(["0061FF", "FFE100", "EE7F77"])
+      .mode("lch") // or "lab" or "hsl"
+      .colors(count);
   };
   const { start, end, m } = defaultMonth();
   const [startDate, setStartDate] = useState(start);
@@ -153,90 +158,22 @@ const Graph = () => {
             <p className="text-center font-semibold text-lg">{month}</p>
             <div className="grid grid-cols-1 md:grid-cols-2 mt-5">
               <div className="flex justify-center">
-                {errorMsgIncome == "" ? (
-                  <svg viewBox="0 0 400 400" className="w-[400px] h-[400px]">
-                    <VictoryPie
-                      standalone={false}
-                      width={400}
-                      height={400}
-                      innerRadius={110}
-                      padAngle={1}
-                      data={income.items?.map((item) => ({
-                        x: item.category,
-                        y: item.percentage,
-                      }))}
-                      theme={VictoryTheme.clean}
-                      colorScale={incomeColor}
-                    />
-                    <VictoryLabel
-                      textAnchor="middle"
-                      style={{
-                        fontSize: 14,
-                        fontWeight: "bold",
-                        fontFamily: "sans-serif",
-                      }}
-                      x={200}
-                      y={190}
-                      text={formatToIDR(income.totalAmount)}
-                    />
-                    <VictoryLabel
-                      textAnchor="middle"
-                      style={{
-                        fontSize: 13,
-                        fontWeight: 300,
-                        fontFamily: "sans-serif",
-                      }}
-                      x={200}
-                      y={210}
-                      text="Your income this month"
-                    />
-                  </svg>
-                ) : (
-                  <p className="my-auto py-15">Data not found</p>
-                )}
+                <DoughnutChart
+                  errorMsg={errorMsgIncome}
+                  data={income}
+                  total={formatToIDR(income.totalAmount)}
+                  colors={incomeColor}
+                  label={"Your income this month"}
+                ></DoughnutChart>
               </div>
               <div className="flex justify-center">
-                {errorMsgExpense == "" ? (
-                  <svg viewBox="0 0 400 400" className="w-[400px] h-[400px]">
-                    <VictoryPie
-                      standalone={false}
-                      width={400}
-                      height={400}
-                      innerRadius={110}
-                      padAngle={1}
-                      data={expense.items?.map((item) => ({
-                        x: item.category,
-                        y: item.percentage,
-                      }))}
-                      theme={VictoryTheme.clean}
-                      colorScale={expenseColor}
-                    />
-                    <VictoryLabel
-                      textAnchor="middle"
-                      style={{
-                        fontSize: 14,
-                        fontWeight: "bold",
-                        fontFamily: "sans-serif",
-                      }}
-                      x={200}
-                      y={190}
-                      text={formatToIDR(expense.totalAmount)}
-                    />
-                    <VictoryLabel
-                      textAnchor="middle"
-                      style={{
-                        fontSize: 13,
-                        fontWeight: 300,
-                        fontFamily: "sans-serif",
-                      }}
-                      x={200}
-                      y={210}
-                      text="Your income this month"
-                    />
-                  </svg>
-                ) : (
-                  <p className="my-auto py-15">Data not found</p>
-                )}
+                <DoughnutChart
+                  errorMsg={errorMsgExpense}
+                  data={expense}
+                  total={formatToIDR(expense.totalAmount)}
+                  colors={expenseColor}
+                  label={"Your expese this month"}
+                ></DoughnutChart>
               </div>
             </div>
           </div>
@@ -284,7 +221,7 @@ const Graph = () => {
                       <div className="flex space-x-2 items-center">
                         <div
                           style={{ backgroundColor: expenseColor[key] }}
-                          className="bg-blue-500 font-semibold text-white text-sm rounded-md py-1 px-2"
+                          className="bg-blue-500 font-semibold text-white text-sm rounded-sm py-1 px-2"
                         >
                           {Number(item.percentage).toFixed(1)}%
                         </div>
