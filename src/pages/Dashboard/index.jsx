@@ -7,6 +7,7 @@ import iconlogo from "../../assets/iconlogo.svg";
 import Navbar from "../../components/Navbar";
 import Select from "../../components/Select";
 import Table from "../../components/Table";
+import AccountAmount from "../../components/AccountAmount";
 
 const Dashboard = () => {
   const defaultMonth = () => {
@@ -150,43 +151,30 @@ const Dashboard = () => {
           <div className="bg-white flex flex-col rounded-xl py-8 px-5 md:px-12 shadow-sm mt-10">
             <div className="flex justify-end">
               <h2 className="text-[#737373] text-sm">
-                Amount Transaction {month}
+                {month} Amount Transaction
               </h2>
             </div>
             <div className="flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-10 mt-8">
-              <div className="flex flex-col pb-5 pe-5 md:pb-0 space-y-1 w-full border-b-1 md:border-b-0 md:border-r-1 border-gray-200">
-                <p className="text-[#737373]">Balance</p>
-                <div className="flex flex-row items-center">
-                  <p className="text-2xl m-0">
-                    {isBalanceShow ? formatToIDR(account?.balance) : "*****"}
-                  </p>
-                  <Icons.balance
-                    className="h-6 text-[#737373] ml-3 hover:text-black"
-                    onClick={() => eyeClick("balance")}
-                  />
-                </div>
+              <div className="w-full border-b-1 md:border-b-0 md:border-r-1 border-gray-200">
+                <AccountAmount
+                  type={"Balance"}
+                  data={formatToIDR(account?.balance)}
+                />
               </div>
-
-              <div className="flex flex-col pb-5 md:pb-0 space-y-1 w-full border-b-1 md:border-b-0 md:border-r-1 border-gray-200">
-                <p className="text-[#737373]">Income</p>
-                <div className="flex flex-row items-center">
-                  <p className="text-2xl m-0">
-                    {formatToIDR(summary.income ?? 0)}
-                  </p>
-                </div>
+              <div className="w-full border-b-1 md:border-b-0 md:border-r-1 border-gray-200">
+                <AccountAmount
+                  type={"Income"}
+                  data={formatToIDR(summary.income ?? 0)}
+                />
               </div>
-
-              <div className="flex flex-col space-y-1 w-full">
-                <p className="text-[#737373]">Expense</p>
-                <div className="flex flex-row items-center">
-                  <p className="text-2xl m-0">
-                    {formatToIDR(summary.expense ?? 0)}
-                  </p>
-                </div>
+              <div className="w-full">
+                <AccountAmount
+                  type={"Income"}
+                  data={formatToIDR(summary.expense ?? 0)}
+                />
               </div>
             </div>
           </div>
-
           <div>
             <div className="mt-4 py-12 px-5 md:px-12 bg-white rounded-xl shadow-md">
               <div className="flex flex-col space-y-5 md:flex-row justify-end mb-8">
