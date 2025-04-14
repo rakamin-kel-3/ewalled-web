@@ -155,6 +155,7 @@ const AddLogs = () => {
                       name="notes"
                       placeholder="Notes:"
                       rounded="3xl"
+                      classname={"w-full"}
                       {...register("notes", { required: false })}
                     />
                   </div>
