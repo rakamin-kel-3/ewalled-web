@@ -1,13 +1,12 @@
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { getAccount } from "../../api/model/account";
 import { getSummary } from "../../api/model/money-logs";
 import iconlogo from "../../assets/iconlogo.svg";
+import AccountAmount from "../../components/AccountAmount";
 import Navbar from "../../components/Navbar";
 import Select from "../../components/Select";
 import Table from "../../components/Table";
-import AccountAmount from "../../components/AccountAmount";
 
 const Dashboard = () => {
   const defaultMonth = () => {
@@ -33,10 +32,6 @@ const Dashboard = () => {
   const [endDate, setEndDate] = useState(end);
   const [month, setMonth] = useState(m);
   const [week, setWeek] = useState({ name: "Full Month", value: "full" });
-  const [isBalanceShow, setIsBalanceShow] = useState(true);
-  const Icons = {
-    balance: isBalanceShow ? EyeIcon : EyeSlashIcon,
-  };
 
   const fetchSummary = async () => {
     try {
@@ -76,10 +71,6 @@ const Dashboard = () => {
       currency: "IDR",
       minimumFractionDigits: 2,
     }).format(amount);
-  };
-
-  const eyeClick = (type) => {
-    if (type === "balance") setIsBalanceShow((prev) => !prev);
   };
 
   const handleChangeMonth = (e) => {
@@ -169,7 +160,7 @@ const Dashboard = () => {
               </div>
               <div className="w-full">
                 <AccountAmount
-                  type={"Income"}
+                  type={"Expense"}
                   data={formatToIDR(summary.expense ?? 0)}
                 />
               </div>
